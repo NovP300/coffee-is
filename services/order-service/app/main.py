@@ -1,18 +1,25 @@
 from fastapi import FastAPI
-from app.core.settings import settings
-from app.db.session import create_db_engine, ping_db
 
-engine = create_db_engine(settings.database_url)
+from app.core.settings import settings
+from app.db.session import ping_db, engine
+from app.db.base import Base
+from app.models import order as _order  # noqa: F401
+from app.models import order_item as _order_item  # noqa: F401
+
+from app.api.orders import router as orders_router
 
 app = FastAPI(title=settings.service_name)
 
 
 @app.on_event("startup")
 def on_startup():
-    # Проверяем, что БД доступна (упадёт сразу, если DATABASE_URL неверный)
-    ping_db(engine)
+    ping_db()
+    Base.metadata.create_all(bind=engine)
 
 
 @app.get("/health")
 def health():
     return {"status": "ok", "service": settings.service_name}
+
+
+app.include_router(orders_router)
