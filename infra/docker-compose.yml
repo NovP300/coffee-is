@@ -1,0 +1,156 @@
+services:
+  gateway:
+    image: nginx:alpine
+    container_name: coffee-gateway
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - auth-service
+      - customer-service
+      - menu-service
+      - order-service
+      - kitchen-service
+      - inventory-service
+      - analytics-service
+    networks: [coffee-net]
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: coffee-postgres
+    environment:
+      POSTGRES_USER: coffee
+      POSTGRES_PASSWORD: coffee
+    ports:
+      - "5432:5432"
+    volumes:
+      - coffee_pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    networks: [coffee-net]
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: coffee-rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: coffee
+      RABBITMQ_DEFAULT_PASS: coffee
+    networks: [coffee-net]
+
+  auth-service:
+    build: ../services/auth-service
+    container_name: coffee-auth
+    environment:
+      DATABASE_URL: postgresql+psycopg://coffee:coffee@postgres:5432/auth_db
+      JWT_SECRET: "change_me"
+      JWT_ALG: "HS256"
+      CUSTOMER_SERVICE_URL: http://customer-service:8000
+    depends_on:
+      - postgres
+    networks: [coffee-net]
+
+  customer-service:
+    build: ../services/customer-service
+    container_name: coffee-customer
+    environment:
+      DATABASE_URL: postgresql+psycopg://coffee:coffee@postgres:5432/customer_db
+      JWT_SECRET: "change_me"
+      JWT_ALG: "HS256"
+      RABBITMQ_URL: amqp://coffee:coffee@rabbitmq:5672/
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks: [coffee-net]
+
+  menu-service:
+    build: ../services/menu-service
+    container_name: coffee-menu
+    environment:
+      DATABASE_URL: postgresql+psycopg://coffee:coffee@postgres:5432/menu_db
+      JWT_SECRET: "change_me"
+      JWT_ALG: "HS256"
+    depends_on:
+      - postgres
+    networks: [coffee-net]
+
+  order-service:
+    build: ../services/order-service
+    container_name: coffee-order
+    environment:
+      DATABASE_URL: postgresql+psycopg://coffee:coffee@postgres:5432/order_db
+      JWT_SECRET: "change_me"
+      JWT_ALG: "HS256"
+      MENU_SERVICE_URL: http://menu-service:8000
+      RABBITMQ_URL: amqp://coffee:coffee@rabbitmq:5672/
+    depends_on:
+      - postgres
+      - rabbitmq
+      - menu-service
+    networks: [coffee-net]
+
+  kitchen-service:
+    build: ../services/kitchen-service
+    container_name: coffee-kitchen
+    environment:
+      DATABASE_URL: postgresql+psycopg://coffee:coffee@postgres:5432/kitchen_db
+      JWT_SECRET: "change_me"
+      JWT_ALG: "HS256"
+      ORDER_SERVICE_URL: http://order-service:8000
+      RABBITMQ_URL: amqp://coffee:coffee@rabbitmq:5672/
+    depends_on:
+      - postgres
+      - rabbitmq
+      - order-service
+    networks: [coffee-net]
+
+  inventory-service:
+    build: ../services/inventory-service
+    container_name: coffee-inventory
+    environment:
+      DATABASE_URL: postgresql+psycopg://coffee:coffee@postgres:5432/inventory_db
+      JWT_SECRET: "change_me"
+      JWT_ALG: "HS256"
+      RABBITMQ_URL: amqp://coffee:coffee@rabbitmq:5672/
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks: [coffee-net]
+
+  analytics-service:
+    build: ../services/analytics-service
+    container_name: coffee-analytics
+    environment:
+      DATABASE_URL: postgresql+psycopg://coffee:coffee@postgres:5432/analytics_db
+      JWT_SECRET: "change_me"
+      JWT_ALG: "HS256"
+      RABBITMQ_URL: amqp://coffee:coffee@rabbitmq:5672/
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks: [coffee-net]
+    
+  minio:
+    image: minio/minio:latest
+    container_name: coffee-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: coffee
+      MINIO_ROOT_PASSWORD: coffee12345
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - coffee_minio_data:/data
+    networks: [coffee-net]
+
+    
+networks:
+  coffee-net:
+    driver: bridge
+
+volumes:
+  coffee_pgdata:
+  coffee_minio_data:
