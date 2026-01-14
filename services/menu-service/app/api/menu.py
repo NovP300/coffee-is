@@ -1,3 +1,5 @@
+from uuid import UUID
+from fastapi import HTTPException
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -33,4 +35,21 @@ def create_menu_item(payload: MenuItemCreate, db: Session = Depends(get_db)):
     db.add(item)
     db.commit()
     db.refresh(item)
+    return item
+
+
+@router.get("/items/{menu_item_id}", response_model=MenuItemOut)
+def get_menu_item(
+    menu_item_id: UUID,
+    db: Session = Depends(get_db),
+    include_inactive: bool = False,
+):
+    stmt = select(MenuItem).where(MenuItem.menu_item_id == menu_item_id)
+    if not include_inactive:
+        stmt = stmt.where(MenuItem.is_active == True)  # noqa: E712
+
+    item = db.scalar(stmt)
+    if not item:
+        raise HTTPException(status_code=404, detail="Menu item not found")
+
     return item

@@ -17,6 +17,8 @@ class Order(Base):
 
 
     status: Mapped[str] = mapped_column(String, nullable=False, default="PAID")
+    channel: Mapped[str] = mapped_column(String, nullable=False, default="IN_STORE")
+
 
     total_price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
 
