@@ -15,4 +15,12 @@ class MenuClient:
                 raise ValueError("Menu item not found")
             r.raise_for_status()
             return r.json()
+        
+    async def get_recipe(self, menu_item_id: UUID) -> list[dict]:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            r = await client.get(f"{self.base_url}/items/{menu_item_id}/recipe")
+            if r.status_code == 404:
+                raise ValueError("Menu item recipe not found")
+            r.raise_for_status()
+            return r.json()
 

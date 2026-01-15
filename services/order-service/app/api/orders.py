@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from decimal import Decimal
+from collections import defaultdict
 
 from app.db.session import get_db
 from app.models.order import Order
@@ -24,14 +25,29 @@ async def create_order(payload: OrderCreate, request: Request, db: Session = Dep
 
     total = Decimal("0.00")
     items_to_save: list[OrderItem] = []
+    ingredients_totals: dict[str, int] = defaultdict(int)
+
 
     for it in payload.items:
         try:
             menu_item = await menu_client.get_item(it.menu_item_id)
+            
         except ValueError:
             raise HTTPException(status_code=404, detail=f"Menu item not found: {it.menu_item_id}")
         except Exception:
             raise HTTPException(status_code=502, detail="Menu service unavailable")
+        
+        try:
+            recipe = await menu_client.get_recipe(it.menu_item_id)
+        except ValueError:
+            recipe = []  # нет рецепта — списаний не будет
+        except Exception:
+            raise HTTPException(status_code=502, detail="Menu service unavailable")
+        
+        for r in recipe:
+            ing_id = str(r["ingredient_id"])
+            per_one_qty = int(r["quantity"])
+            ingredients_totals[ing_id] += per_one_qty * it.quantity
 
         unit_price = Decimal(str(menu_item["price"]))
         total += unit_price * it.quantity
@@ -71,6 +87,14 @@ async def create_order(payload: OrderCreate, request: Request, db: Session = Dep
         }
         for i in order.items
     ],
+    "ingredients" : [ 
+        {
+        "ingredient_id": ing_id, 
+        "quantity": qty
+        }
+        for ing_id, qty in ingredients_totals.items()
+    ]
+
     }
 
     print("ORDER publish order.created:", event["order_id"]) #проверка до
