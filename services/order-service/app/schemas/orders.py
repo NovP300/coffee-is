@@ -9,7 +9,7 @@ class OrderItemCreate(BaseModel):
 
 
 class OrderCreate(BaseModel):
-    customer_id: UUID | None = None
+
     channel: str = Field(default="IN_STORE")
     items: list[OrderItemCreate]
 

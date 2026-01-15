@@ -6,6 +6,9 @@ class Settings(BaseSettings):
     database_url: str
     menu_service_url: str
     rabbitmq_url: str
+    jwt_secret: str
+    jwt_alg: str = "HS256"
+
 
     model_config = SettingsConfigDict(env_file=None, extra="ignore")
 

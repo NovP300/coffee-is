@@ -27,6 +27,8 @@ from app.models.inventory_movement import InventoryMovement
 
 
 app = FastAPI(title=settings.service_name)
+
+
 app.include_router(inventory_router)
 
 consumer = RabbitConsumer(

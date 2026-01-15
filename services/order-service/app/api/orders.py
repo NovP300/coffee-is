@@ -9,6 +9,9 @@ from app.models.order_item import OrderItem
 from app.schemas.orders import OrderCreate, OrderOut
 from app.integrations.menu_client import MenuClient
 
+from app.core.auth import get_current_user, CurrentUser
+
+
 from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -19,7 +22,7 @@ menu_client = MenuClient()
 from fastapi import Request
 
 @router.post("/orders", response_model=OrderOut, status_code=201)
-async def create_order(payload: OrderCreate, request: Request, db: Session = Depends(get_db)):
+async def create_order(payload: OrderCreate, request: Request, db: Session = Depends(get_db),current_user: CurrentUser = Depends(get_current_user)):
     if not payload.items:
         raise HTTPException(status_code=400, detail="Order must contain at least one item")
 
@@ -57,7 +60,7 @@ async def create_order(payload: OrderCreate, request: Request, db: Session = Dep
         )
 
     order = Order(
-    customer_id=payload.customer_id,
+    customer_id=current_user.user_id,
     channel=payload.channel,
     status="PAID",
     total_price=total,
@@ -104,6 +107,25 @@ async def create_order(payload: OrderCreate, request: Request, db: Session = Dep
     return order
 
 
+
+@router.get("/orders/me", response_model=list[OrderOut])
+def my_orders(
+    db: Session = Depends(get_db),
+    current_user: CurrentUser = Depends(get_current_user),
+):
+    stmt = (
+        select(Order)
+        .where(Order.customer_id == current_user.user_id)
+        .options(selectinload(Order.items))
+        .order_by(Order.created_at.desc() if hasattr(Order, "created_at") else Order.order_id.desc())
+        .limit(50)
+    )
+    orders = db.execute(stmt).scalars().all()
+    return orders
+
+
+
+
 @router.get("/orders/{order_id}", response_model=OrderOut)
 def get_order(order_id: UUID, db: Session = Depends(get_db)):
     stmt = (
@@ -138,3 +160,5 @@ def list_orders(
 
     orders = db.scalars(stmt.limit(limit)).all()
     return orders
+
+

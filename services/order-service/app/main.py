@@ -12,6 +12,10 @@ from app.api.orders import router as orders_router
 
 app = FastAPI(title=settings.service_name)
 
+app.include_router(orders_router)
+
+
+
 
 
 @app.on_event("startup")
@@ -33,4 +37,4 @@ def health():
     return {"status": "ok", "service": settings.service_name}
 
 
-app.include_router(orders_router)
+

@@ -16,7 +16,10 @@ from app.models.kitchen_order import KitchenOrder
 from app.api.kitchen import router as kitchen_router
 
 
+
 app = FastAPI(title=settings.service_name)
+
+
 
 app.include_router(kitchen_router)
 

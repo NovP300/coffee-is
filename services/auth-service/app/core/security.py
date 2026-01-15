@@ -17,12 +17,19 @@ def verify_password(password: str, password_hash: str) -> bool:
     return pwd_context.verify(password, password_hash)
 
 
-def create_access_token(subject: str, role: str, expires_minutes: int = 60) -> str:
+def create_access_token(
+    user_id: str,
+    username: str,
+    role: str,
+    expires_minutes: int = 60,
+) -> str:
     now = datetime.now(timezone.utc)
     payload: dict[str, Any] = {
-        "sub": subject,
+        "sub": user_id,          # ← UUID пользователя
+        "username": username,    
         "role": role,
         "iat": int(now.timestamp()),
         "exp": int((now + timedelta(minutes=expires_minutes)).timestamp()),
     }
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_alg)
+

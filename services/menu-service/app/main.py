@@ -14,6 +14,8 @@ from app.api.recipe import router as recipe_router
 app = FastAPI(title=settings.service_name)
 
 app.include_router(recipe_router)
+app.include_router(menu_router)
+
 
 
 
@@ -28,4 +30,4 @@ def health():
     return {"status": "ok", "service": settings.service_name}
 
 
-app.include_router(menu_router)
+

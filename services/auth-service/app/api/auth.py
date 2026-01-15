@@ -49,5 +49,10 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
     user.last_login_at = datetime.utcnow()
     db.commit()
 
-    token = create_access_token(subject=str(user.user_id), role=user.role, expires_minutes=60)
+    token = create_access_token(
+    user_id=str(user.user_id),   # ← UUID из БД
+    username=user.username,
+    role=user.role, 
+    )
+
     return TokenResponse(access_token=token)

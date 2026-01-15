@@ -1,12 +1,13 @@
 from datetime import datetime, timezone
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.models.kitchen_order import KitchenOrder
+from app.schemas.kitchen import KitchenQueueItemOut
 from app.schemas.kitchen import KitchenOrderOut
 
 router = APIRouter(tags=["kitchen"])
@@ -58,3 +59,16 @@ def complete_order(order_id: UUID, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(row)
     return row
+
+
+@router.get("/orders", response_model=list[KitchenQueueItemOut])
+def list_queue(
+    status: list[str] = Query(default=["NEW", "IN_PROGRESS"]),
+    db: Session = Depends(get_db),
+):
+    rows = db.scalars(
+        select(KitchenOrder)
+        .where(KitchenOrder.status.in_(status))
+        .order_by(KitchenOrder.created_at.asc())
+    ).all()
+    return rows

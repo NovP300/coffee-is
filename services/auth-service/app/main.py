@@ -9,6 +9,9 @@ from app.api.auth import router as auth_router
 
 app = FastAPI(title=settings.service_name)
 
+app.include_router(auth_router)
+
+
 
 @app.on_event("startup")
 def on_startup():
@@ -22,4 +25,4 @@ def health():
     return {"status": "ok", "service": settings.service_name}
 
 
-app.include_router(auth_router)
+
