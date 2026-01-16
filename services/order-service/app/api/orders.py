@@ -10,6 +10,9 @@ from app.schemas.orders import OrderCreate, OrderOut
 from app.integrations.menu_client import MenuClient
 
 from app.core.auth import get_current_user, CurrentUser
+from app.metrics import ORDERS_CREATED
+
+
 
 
 from uuid import UUID
@@ -74,6 +77,9 @@ async def create_order(payload: OrderCreate, request: Request, db: Session = Dep
 
     db.commit()
     db.refresh(order)
+
+    ORDERS_CREATED.labels(channel=order.channel).inc()
+
 
     event = {
     "event_type": "OrderCreated",

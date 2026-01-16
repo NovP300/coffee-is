@@ -145,6 +145,26 @@ services:
     volumes:
       - coffee_minio_data:/data
     networks: [coffee-net]
+    
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - order-service
+    networks: [coffee-net]
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks: [coffee-net]
 
     
 networks:
