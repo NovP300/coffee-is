@@ -273,193 +273,558 @@ export default function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tab, autoRefreshOrders, token]);
 
+
+
+   
+
+
+
+    /* ===================== STYLES ===================== */
+
+    const styles = {
+        app: {
+            minHeight: "100vh",
+            background: "#f3f4f6",
+            fontFamily:
+                '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+            color: "#111827",
+            width: "100vw", 
+
+
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        container: {
+            width: "100%",
+            maxWidth: 980,
+            margin: "0 auto",
+            padding: "16px",
+            
+        },
+        header: {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            marginBottom: 16,
+            gap: 12,
+        },
+        title: {
+            fontSize: 26,
+            fontWeight: 700,
+            letterSpacing: 0.3,
+        },
+        subtitle: {
+            fontSize: 13,
+            color: "#6b7280",
+        },
+        userBlock: {
+            marginLeft: "auto",
+            fontSize: 13,
+            color: "#6b7280",
+        },
+        card: {
+            background: "#ffffff",
+            borderRadius: 16,
+            padding: 18,
+            boxShadow:
+                "0 10px 25px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.1)",
+            border: "1px solid #e5e7eb",
+        },
+        tabsRow: {
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            marginBottom: 12,
+            flexWrap: "wrap",
+        },
+        tabs: {
+            display: "inline-flex",
+            background: "#e5e7eb",
+            borderRadius: 999,
+            padding: 4,
+            gap: 4,
+        },
+        tabButton: (active) => ({
+            border: "none",
+            outline: "none",
+            padding: "7px 16px",
+            borderRadius: 999,
+            fontSize: 14,
+            fontWeight: 500,
+            cursor: "pointer",
+            background: active ? "#111827" : "transparent",
+            color: active ? "#f9fafb" : "#4b5563",
+            transition: "all 0.15s ease-in-out",
+            boxShadow: active ? "0 6px 14px rgba(15,23,42,0.25)" : "none",
+        }),
+        linkButton: {
+            borderRadius: 999,
+            border: "none",
+            padding: "6px 12px",
+            fontSize: 13,
+            fontWeight: 500,
+            cursor: "pointer",
+            background: "#111827",
+            color: "#f9fafb",
+        },
+        ghostButton: {
+            borderRadius: 999,
+            border: "1px solid #d1d5db",
+            padding: "6px 12px",
+            fontSize: 13,
+            fontWeight: 500,
+            cursor: "pointer",
+            background: "white",
+            color: "#374151",
+        },
+        primaryButton: {
+            borderRadius: 999,
+            border: "none",
+            padding: "8px 16px",
+            fontSize: 14,
+            fontWeight: 500,
+            cursor: "pointer",
+            background:
+                "linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%)",
+            color: "#f9fafb",
+            boxShadow: "0 8px 18px rgba(79, 70, 229, 0.45)",
+        },
+        alertError: {
+            marginTop: 10,
+            padding: "10px 12px",
+            borderRadius: 10,
+            background: "#fee2e2",
+            border: "1px solid #fecaca",
+            color: "#991b1b",
+            fontSize: 13,
+            whiteSpace: "pre-wrap",
+        },
+        authCard: {
+            marginTop: 12,
+            maxWidth: 420,
+        },
+        authTabs: {
+            display: "inline-flex",
+            background: "#e5e7eb",
+            borderRadius: 999,
+            padding: 4,
+            gap: 4,
+            marginBottom: 12,
+        },
+        label: {
+            display: "block",
+            fontSize: 13,
+            color: "#374151",
+            marginBottom: 4,
+        },
+        input: {
+            width: "100%",
+            padding: "7px 10px",
+            borderRadius: 999,
+            border: "1px solid #d1d5db",
+            outline: "none",
+            fontSize: 14,
+            background: "#f9fafb",
+        },
+        gridMenu: {
+            display: "grid",
+            gridTemplateColumns: "1.6fr 1fr",
+            gap: 14,
+            marginTop: 12,
+        },
+        menuToolbar: {
+            display: "flex",
+            gap: 8,
+            alignItems: "center",
+            marginBottom: 10,
+        },
+        menuCard: {
+            border: "1px solid #e5e7eb",
+            borderRadius: 12,
+            padding: 12,
+            background: "#f9fafb",
+        },
+        menuHeaderRow: {
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 8,
+            alignItems: "center",
+        },
+        menuPrice: {
+            fontWeight: 600,
+            fontSize: 14,
+            color: "#4b5563",
+        },
+        thumbImage: {
+            width: "100%",
+            maxWidth: 260,
+            borderRadius: 10,
+            marginTop: 8,
+            objectFit: "cover",
+        },
+        quantityText: {
+            marginLeft: "auto",
+            fontSize: 13,
+            color: "#4b5563",
+        },
+        cartCard: {
+            border: "1px solid #e5e7eb",
+            borderRadius: 12,
+            padding: 12,
+            background: "#ffffff",
+            height: "fit-content",
+        },
+        cartItemRow: {
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: 14,
+        },
+        ordersToolbar: {
+            display: "flex",
+            gap: 10,
+            alignItems: "center",
+            marginBottom: 10,
+            flexWrap: "wrap",
+        },
+        checkboxLabel: {
+            display: "flex",
+            gap: 6,
+            alignItems: "center",
+            fontSize: 13,
+            color: "#4b5563",
+        },
+        checkbox: {
+            width: 14,
+            height: 14,
+            accentColor: "#4f46e5",
+        },
+        ordersList: {
+            display: "grid",
+            gap: 10,
+        },
+        orderCard: {
+            border: "1px solid #e5e7eb",
+            borderRadius: 12,
+            padding: 12,
+            background: "#f9fafb",
+        },
+        orderHeaderRow: {
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 8,
+        },
+        badge: (color) => ({
+            display: "inline-flex",
+            alignItems: "center",
+            padding: "3px 8px",
+            borderRadius: 999,
+            fontSize: 11,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: 0.04,
+            ...(color === "green" && {
+                background: "rgba(16, 185, 129, 0.12)",
+                color: "#047857",
+            }),
+            ...(color === "yellow" && {
+                background: "rgba(234, 179, 8, 0.18)",
+                color: "#92400e",
+            }),
+            ...(color === "gray" && {
+                background: "rgba(156, 163, 175, 0.18)",
+                color: "#374151",
+            }),
+        }),
+    };
+
     /* ===================== UI ===================== */
     return (
-        <div style={{ fontFamily: "system-ui, sans-serif", padding: 16, maxWidth: 980, margin: "0 auto" }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-                <h2 style={{ margin: 0 }}>Клиентское приложение</h2>
-                
-            </div>
-
-            <div style={{ display: "flex", gap: 8, marginTop: 12, alignItems: "center" }}>
-                {token ? (
-                    <>
-                        <button onClick={() => setTab("menu")} disabled={tab === "menu"}>Меню</button>
-                        <button onClick={() => setTab("orders")} disabled={tab === "orders"}>Мои заказы</button>
-
-                        <div style={{ marginLeft: "auto", display: "flex", gap: 10, alignItems: "center" }}>
-                            <span style={{ opacity: 0.8 }}>
-                                Добро пожаловать, <b>{me || "пользователь"}</b>
-                            </span>
-                            <button onClick={logout}>Выйти</button>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <button onClick={() => setTab("auth")} disabled>Вход</button>
-                    </>
-                )}
-            </div>
-
-            {error && (
-                <div style={{ color: "crimson", whiteSpace: "pre-wrap", marginTop: 10 }}>
-                    {error}
-                </div>
-            )}
-
-            {/* ============ AUTH ============ */}
-            {tab === "auth" && !token && (
-                <div style={{ border: "1px solid #ddd", borderRadius: 10, padding: 12, maxWidth: 420, marginTop: 12 }}>
-                    <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-                        <button onClick={() => setAuthMode("login")} disabled={authMode === "login"}>Вход</button>
-                        <button onClick={() => setAuthMode("register")} disabled={authMode === "register"}>Регистрация</button>
-                    </div>
-
-                    <div style={{ display: "grid", gap: 8 }}>
-                        <label>
-                            Логин
-                            <input value={username} onChange={(e) => setUsername(e.target.value)} style={{ width: "100%" }} />
-                        </label>
-                        <label>
-                            Пароль
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                style={{ width: "100%" }}
-                            />
-                        </label>
-
-                        {authMode === "login" ? (
-                            <button onClick={login}>Войти</button>
-                        ) : (
-                            <button onClick={register}>Зарегистрироваться</button>
-                        )}
-                    </div>
-
-                    
-                </div>
-            )}
-
-            {/* ============ MENU ============ */}
-            {tab === "menu" && token && (
-                <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 12, marginTop: 12 }}>
+        <div style={styles.app}>
+            <div style={styles.container}>
+                <div style={styles.header}>
                     <div>
-                        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
-                            <button onClick={loadMenu} disabled={loadingMenu}>
-                                {loadingMenu ? "Загрузка..." : "Обновить меню"}
-                            </button>
-                            <div style={{ opacity: 0.7 }}>{menu.length} позиций</div>
-                        </div>
-
-                        <div style={{ display: "grid", gap: 10 }}>
-                            {menu.map((m) => (
-                                <div key={m.menu_item_id} style={{ border: "1px solid #ddd", borderRadius: 10, padding: 12 }}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-                                        <b>{m.name}</b>
-                                        <span>{Number(m.price).toFixed(2)} ₽</span>
-                                    </div>
-
-                                    {m.image_url && (
-                                        <div style={{ marginTop: 8 }}>
-                                            <img src={m.image_url} alt={m.name} style={{ width: "100%", maxWidth: 260, borderRadius: 10 }} />
-                                        </div>
-                                    )}
-
-                                    <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
-                                        <button onClick={() => addToCart(m.menu_item_id)}>Добавить</button>
-                                        <button onClick={() => removeFromCart(m.menu_item_id)} disabled={!cart[m.menu_item_id]}>
-                                            Убрать
-                                        </button>
-                                        <span style={{ marginLeft: "auto", opacity: 0.8 }}>
-                                            Кол-во: {cart[m.menu_item_id] || 0}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
+                        <div style={styles.title}>Клиентское приложение</div>
+                        <div style={styles.subtitle}>
+                            Заказ напитков, корзина и отслеживание статуса
                         </div>
                     </div>
-
-                    <div style={{ border: "1px solid #ddd", borderRadius: 10, padding: 12, height: "fit-content" }}>
-                        <h3 style={{ marginTop: 0 }}>Корзина</h3>
-
-                        {cartItems.length === 0 ? (
-                            <div style={{ opacity: 0.7 }}>Корзина пустая</div>
-                        ) : (
-                            <div style={{ display: "grid", gap: 8 }}>
-                                {cartItems.map((x) => (
-                                    <div key={x.menu_item_id} style={{ display: "flex", justifyContent: "space-between" }}>
-                                        <span>{x.item.name} × {x.quantity}</span>
-                                        <span>{(Number(x.item.price) * x.quantity).toFixed(2)} ₽</span>
-                                    </div>
-                                ))}
-                                <hr />
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                    <b>Итого</b>
-                                    <b>{totalPrice.toFixed(2)} ₽</b>
-                                </div>
-                                <button onClick={createOrder}>Оформить заказ</button>
-                                <button onClick={clearCart}>Очистить</button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {/* ============ ORDERS ============ */}
-            {tab === "orders" && token && (
-                <div style={{ marginTop: 12 }}>
-                    <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 10 }}>
-                        <button onClick={loadMyOrders} disabled={loadingOrders}>
-                            {loadingOrders ? "Загрузка..." : "Обновить"}
-                        </button>
-                        <label style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                            <input
-                                type="checkbox"
-                                checked={autoRefreshOrders}
-                                onChange={(e) => setAutoRefreshOrders(e.target.checked)}
-                            />
-                            Автообновление (7 сек)
-                        </label>
-                    </div>
-
-                    {myOrders.length === 0 ? (
-                        <div style={{ opacity: 0.7 }}>Пока нет заказов. Создайте заказ в меню.</div>
-                    ) : (
-                        <div style={{ display: "grid", gap: 10 }}>
-                            {myOrders.map((o) => (
-                                <div key={o.order_id} style={{ border: "1px solid #ddd", borderRadius: 10, padding: 12 }}>
-                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                        <b>Заказ {String(o.order_id).slice(0, 8)}…</b>
-                                        <span>
-                                            <b>Статус:</b> {statusRu(o.kitchen_status)}
-                                        </span>
-                                    </div>
-
-                                    <div style={{ marginTop: 6, opacity: 0.9 }}>
-                                        <b>Оплата:</b> {o.paid_status}{" "}
-                                        | <b>Сумма:</b> {Number(o.total_price).toFixed(2)} ₽{" "}
-                                        | <b>Канал:</b> {o.channel}
-                                    </div>
-
-                                    {/* состав заказа */}
-                                    {Array.isArray(o.items) && o.items.length > 0 && (
-                                        <div style={{ marginTop: 8, opacity: 0.9 }}>
-                                            <b>Состав:</b>{" "}
-                                            {o.items.map((it, idx) => (
-                                                <span key={idx}>
-                                                    {menuMap[it.menu_item_id] ?? it.menu_item_id} × {it.quantity}
-                                                    {idx < o.items.length - 1 ? ", " : ""}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
+                    {token && (
+                        <div style={styles.userBlock}>
+                            Добро пожаловать, <strong>{me || "пользователь"}</strong>
                         </div>
                     )}
                 </div>
-            )}
+
+                <div style={styles.card}>
+                    <div style={styles.tabsRow}>
+                        {token ? (
+                            <>
+                                <div style={styles.tabs}>
+                                    <button
+                                        style={styles.tabButton(tab === "menu")}
+                                        onClick={() => setTab("menu")}
+                                    >
+                                        Меню
+                                    </button>
+                                    <button
+                                        style={styles.tabButton(tab === "orders")}
+                                        onClick={() => setTab("orders")}
+                                    >
+                                        Мои заказы
+                                    </button>
+                                </div>
+                                <button
+                                    style={{ ...styles.ghostButton, marginLeft: "auto" }}
+                                    onClick={logout}
+                                >
+                                    Выйти
+                                </button>
+                            </>
+                        ) : (
+                            <div style={styles.tabs}>
+                                <button style={styles.tabButton(true)} disabled>
+                                    Вход
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {error && <div style={styles.alertError}>{error}</div>}
+
+                    {/* AUTH */}
+                    {tab === "auth" && !token && (
+                        <div style={{ ...styles.card, ...styles.authCard, boxShadow: "none" }}>
+                            <div style={styles.authTabs}>
+                                <button
+                                    style={styles.tabButton(authMode === "login")}
+                                    onClick={() => setAuthMode("login")}
+                                >
+                                    Вход
+                                </button>
+                                <button
+                                    style={styles.tabButton(authMode === "register")}
+                                    onClick={() => setAuthMode("register")}
+                                >
+                                    Регистрация
+                                </button>
+                            </div>
+
+                            <div style={{ display: "grid", gap: 10 }}>
+                                <label>
+                                    <span style={styles.label}>Логин</span>
+                                    <input
+                                        style={styles.input}
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                    />
+                                </label>
+                                <label>
+                                    <span style={styles.label}>Пароль</span>
+                                    <input
+                                        type="password"
+                                        style={styles.input}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                </label>
+
+                                {authMode === "login" ? (
+                                    <button style={styles.primaryButton} onClick={login}>
+                                        Войти
+                                    </button>
+                                ) : (
+                                    <button style={styles.primaryButton} onClick={register}>
+                                        Зарегистрироваться
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MENU */}
+                    {tab === "menu" && token && (
+                        <div style={styles.gridMenu}>
+                            <div>
+                                <div style={styles.menuToolbar}>
+                                    <button
+                                        style={styles.ghostButton}
+                                        onClick={loadMenu}
+                                        disabled={loadingMenu}
+                                    >
+                                        {loadingMenu ? "Загрузка..." : "Обновить меню"}
+                                    </button>
+                                    <div style={{ fontSize: 13, color: "#6b7280" }}>
+                                        Позиции: {menu.length}
+                                    </div>
+                                </div>
+
+                                <div style={{ display: "grid", gap: 10 }}>
+                                    {menu.map((m) => (
+                                        <div key={m.menu_item_id} style={styles.menuCard}>
+                                            <div style={styles.menuHeaderRow}>
+                                                <b>{m.name}</b>
+                                                <span style={styles.menuPrice}>
+                                                    {Number(m.price).toFixed(2)} ₽
+                                                </span>
+                                            </div>
+
+                                            {m.image_url && (
+                                                <img
+                                                    src={m.image_url}
+                                                    alt={m.name}
+                                                    style={styles.thumbImage}
+                                                />
+                                            )}
+
+                                            <div
+                                                style={{
+                                                    marginTop: 8,
+                                                    display: "flex",
+                                                    gap: 8,
+                                                    alignItems: "center",
+                                                }}
+                                            >
+                                                <button
+                                                    style={styles.linkButton}
+                                                    onClick={() => addToCart(m.menu_item_id)}
+                                                >
+                                                    Добавить
+                                                </button>
+                                                <button
+                                                    style={styles.ghostButton}
+                                                    onClick={() => removeFromCart(m.menu_item_id)}
+                                                    disabled={!cart[m.menu_item_id]}
+                                                >
+                                                    Убрать
+                                                </button>
+                                                <span style={styles.quantityText}>
+                                                    Кол-во: {cart[m.menu_item_id] || 0}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div style={styles.cartCard}>
+                                <h3 style={{ marginTop: 0, marginBottom: 8 }}>Корзина</h3>
+
+                                {cartItems.length === 0 ? (
+                                    <div style={{ fontSize: 13, color: "#6b7280" }}>
+                                        Корзина пустая
+                                    </div>
+                                ) : (
+                                    <div style={{ display: "grid", gap: 8 }}>
+                                        {cartItems.map((x) => (
+                                            <div
+                                                key={x.menu_item_id}
+                                                style={styles.cartItemRow}
+                                            >
+                                                <span>
+                                                    {x.item.name} × {x.quantity}
+                                                </span>
+                                                <span>
+                                                    {(Number(x.item.price) * x.quantity).toFixed(2)} ₽
+                                                </span>
+                                            </div>
+                                        ))}
+                                        <hr />
+                                        <div style={styles.cartItemRow}>
+                                            <b>Итого</b>
+                                            <b>{totalPrice.toFixed(2)} ₽</b>
+                                        </div>
+                                        <button style={styles.primaryButton} onClick={createOrder}>
+                                            Оформить заказ
+                                        </button>
+                                        <button style={styles.ghostButton} onClick={clearCart}>
+                                            Очистить
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ORDERS */}
+                    {tab === "orders" && token && (
+                        <div style={{ marginTop: 12 }}>
+                            <div style={styles.ordersToolbar}>
+                                <button
+                                    style={styles.ghostButton}
+                                    onClick={loadMyOrders}
+                                    disabled={loadingOrders}
+                                >
+                                    {loadingOrders ? "Загрузка..." : "Обновить"}
+                                </button>
+                                <label style={styles.checkboxLabel}>
+                                    <input
+                                        type="checkbox"
+                                        style={styles.checkbox}
+                                        checked={autoRefreshOrders}
+                                        onChange={(e) => setAutoRefreshOrders(e.target.checked)}
+                                    />
+                                    Автообновление (7 сек)
+                                </label>
+                            </div>
+
+                            {myOrders.length === 0 ? (
+                                <div style={{ fontSize: 13, color: "#6b7280" }}>
+                                    Пока нет заказов. Создайте заказ в меню.
+                                </div>
+                            ) : (
+                                <div style={styles.ordersList}>
+                                    {myOrders.map((o) => (
+                                        <div key={o.order_id} style={styles.orderCard}>
+                                            <div style={styles.orderHeaderRow}>
+                                                <b>Заказ {String(o.order_id).slice(0, 8)}…</b>
+                                                <span>
+                                                    <b>Статус: </b>
+                                                    <span>
+                                                        {statusRu(o.kitchen_status)}
+                                                    </span>
+                                                </span>
+                                            </div>
+
+                                            <div
+                                                style={{
+                                                    marginTop: 6,
+                                                    fontSize: 13,
+                                                    color: "#4b5563",
+                                                }}
+                                            >
+                                                <b>Оплата:</b> {o.paid_status} |{" "}
+                                                <b>Сумма:</b>{" "}
+                                                {Number(o.total_price).toFixed(2)} ₽ |{" "}
+                                                <b>Канал:</b> {o.channel}
+                                            </div>
+
+                                            {Array.isArray(o.items) && o.items.length > 0 && (
+                                                <div
+                                                    style={{
+                                                        marginTop: 8,
+                                                        fontSize: 13,
+                                                        color: "#374151",
+                                                    }}
+                                                >
+                                                    <b>Состав:</b>{" "}
+                                                    {o.items.map((it, idx) => (
+                                                        <span key={idx}>
+                                                            {menuMap[it.menu_item_id] ?? it.menu_item_id} ×{" "}
+                                                            {it.quantity}
+                                                            {idx < o.items.length - 1 ? ", " : ""}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

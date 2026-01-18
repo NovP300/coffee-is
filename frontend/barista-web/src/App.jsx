@@ -137,97 +137,470 @@ export default function App() {
         });
     }, [queue]);
 
+    /* ===================== STYLES ===================== */
+    const styles = {
+        app: {
+            minHeight: "100vh",
+            background: "#f3f4f6",
+            fontFamily:
+                '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+            color: "#111827",
+            width: "100vw", 
+        },
+        container: {
+            maxWidth: 1000,
+            margin: "0 auto",
+            padding: "24px 16px 32px",
+        },
+        header: {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            marginBottom: 20,
+        },
+        title: {
+            fontSize: 28,
+            fontWeight: 700,
+            letterSpacing: 0.3,
+        },
+        subtitle: {
+            fontSize: 14,
+            color: "#6b7280",
+        },
+        card: {
+            background: "#ffffff",
+            borderRadius: 16,
+            padding: 20,
+            boxShadow:
+                "0 10px 25px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.1)",
+            border: "1px solid #e5e7eb",
+        },
+        tabs: {
+            display: "inline-flex",
+            background: "#e5e7eb",
+            borderRadius: 999,
+            padding: 4,
+            marginBottom: 20,
+            gap: 4,
+        },
+        tabButton: (active) => ({
+            border: "none",
+            outline: "none",
+            padding: "8px 18px",
+            borderRadius: 999,
+            fontSize: 14,
+            fontWeight: 500,
+            cursor: "pointer",
+            background: active ? "#111827" : "transparent",
+            color: active ? "#f9fafb" : "#4b5563",
+            transition: "all 0.15s ease-in-out",
+            boxShadow: active ? "0 6px 14px rgba(15,23,42,0.25)" : "none",
+        }),
+        primaryButton: {
+            borderRadius: 999,
+            border: "none",
+            padding: "8px 16px",
+            fontSize: 14,
+            fontWeight: 500,
+            cursor: "pointer",
+            background:
+                "linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%)",
+            color: "#f9fafb",
+            boxShadow: "0 8px 18px rgba(79, 70, 229, 0.45)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            transition: "transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s",
+        },
+        primaryButtonSmall: {
+            borderRadius: 999,
+            border: "none",
+            padding: "6px 12px",
+            fontSize: 13,
+            fontWeight: 500,
+            cursor: "pointer",
+            background: "#111827",
+            color: "#f9fafb",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            transition: "background-color 0.1s ease, transform 0.1s ease",
+        },
+        primaryButtonGhost: {
+            borderRadius: 999,
+            border: "1px solid #d1d5db",
+            padding: "6px 12px",
+            fontSize: 13,
+            fontWeight: 500,
+            cursor: "pointer",
+            background: "white",
+            color: "#374151",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            transition:
+                "background-color 0.1s ease, color 0.1s ease, transform 0.1s ease",
+        },
+        badge: (color) => ({
+            display: "inline-flex",
+            alignItems: "center",
+            padding: "3px 8px",
+            borderRadius: 999,
+            fontSize: 11,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: 0.04,
+            ...(color === "green" && {
+                background: "rgba(16, 185, 129, 0.12)",
+                color: "#047857",
+            }),
+            ...(color === "yellow" && {
+                background: "rgba(234, 179, 8, 0.18)",
+                color: "#92400e",
+            }),
+            ...(color === "gray" && {
+                background: "rgba(156, 163, 175, 0.18)",
+                color: "#374151",
+            }),
+        }),
+        queueList: {
+            marginTop: 16,
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: 14,
+        },
+        orderCard: (status) => ({
+            borderRadius: 14,
+            padding: 14,
+            background: "#f9fafb",
+            border: "1px solid #e5e7eb",
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            position: "relative",
+            ...(status === "IN_PROGRESS" && {
+                borderColor: "#a855f7",
+                boxShadow: "0 0 0 1px rgba(168,85,247,0.2)",
+            }),
+        }),
+        orderHeaderRow: {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 8,
+        },
+        orderId: {
+            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas",
+            fontSize: 13,
+            color: "#4b5563",
+        },
+        orderMeta: {
+            fontSize: 12,
+            color: "#9ca3af",
+        },
+        itemsRow: {
+            fontSize: 13,
+            color: "#374151",
+            lineHeight: 1.4,
+        },
+        itemsLabel: {
+            fontWeight: 500,
+            marginRight: 4,
+        },
+        itemsPill: {
+            display: "inline-flex",
+            alignItems: "center",
+            padding: "3px 8px",
+            borderRadius: 999,
+            background: "#e5e7eb",
+            fontSize: 12,
+            marginRight: 6,
+            marginTop: 4,
+        },
+        orderActions: {
+            marginTop: 8,
+            display: "flex",
+            gap: 8,
+        },
+        toolbar: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            marginBottom: 8,
+            marginTop: 4,
+            flexWrap: "wrap",
+        },
+        autoRefreshLabel: {
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            fontSize: 13,
+            color: "#4b5563",
+        },
+        checkbox: {
+            width: 14,
+            height: 14,
+            accentColor: "#4f46e5",
+        },
+        errorText: {
+            color: "#b91c1c",
+            fontSize: 13,
+            marginTop: 8,
+        },
+        select: {
+            marginTop: 4,
+            padding: "7px 10px",
+            borderRadius: 999,
+            border: "1px solid #d1d5db",
+            fontSize: 14,
+            outline: "none",
+            background: "#f9fafb",
+        },
+        recipeList: {
+            marginTop: 12,
+            paddingLeft: 18,
+            fontSize: 14,
+            color: "#374151",
+        },
+        recipeItem: {
+            marginBottom: 4,
+        },
+    };
+
     /* ===================== UI ===================== */
     return (
-        <div style={{ padding: 20, maxWidth: 900, margin: "0 auto" }}>
-            <h2>Дисплей бариста</h2>
+        <div style={styles.app}>
+            <div style={styles.container}>
+                <div style={styles.header}>
+                    <div>
+                        <div style={styles.title}>Дисплей бариста</div>
+                        <div style={styles.subtitle}>Управление очередью и рецептами</div>
+                    </div>
+                    <div style={{ fontSize: 12, color: "#9ca3af" }}>
+                        {/* здесь можно вывести имя залогиненного пользователя позже */}
+                        Рабочее место бариста
+                    </div>
+                </div>
 
-            <div style={{ marginBottom: 12 }}>
-                <button onClick={() => setTab("queue")}>Очередь заказов</button>{" "}
-                <button onClick={() => setTab("recipes")}>Рецепты</button>
-            </div>
-
-            {tab === "queue" && (
-                <>
-                    <button onClick={loadQueue} disabled={loadingQueue}>
-                        Обновить очередь
-                    </button>{" "}
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={autoRefresh}
-                            onChange={(e) => setAutoRefresh(e.target.checked)}
-                        />
-                        авто-обновление
-                    </label>
-
-                    {queueError && <p style={{ color: "red" }}>{queueError}</p>}
-
-                    {queueSorted.map((o) => (
-                        <div
-                            key={o.order_id}
-                            style={{
-                                border: "1px solid #ccc",
-                                borderRadius: 8,
-                                padding: 10,
-                                marginTop: 10,
-                            }}
+                <div style={styles.card}>
+                    {/* Tabs */}
+                    <div style={styles.tabs}>
+                        <button
+                            style={styles.tabButton(tab === "queue")}
+                            onClick={() => setTab("queue")}
                         >
-                            <b>Заказ:</b> {o.order_id.slice(0, 8)}… <br />
-                            <b>Статус:</b> {o.status}
-                            <br />
-                            <b>Позиции:</b>{" "}
-                            {o.items.items.map((i, idx) => (
-                                <span key={idx}>
-                                    {menuMap[i.menu_item_id] ?? i.menu_item_id} × {i.quantity}{" "}
-                                </span>
-                            ))}
+                            Очередь заказов
+                        </button>
+                        <button
+                            style={styles.tabButton(tab === "recipes")}
+                            onClick={() => setTab("recipes")}
+                        >
+                            Рецепты
+                        </button>
+                    </div>
 
-                            <br />
-                            <button
-                                onClick={() => startOrder(o.order_id)}
-                                disabled={o.status !== "NEW"}
+                    {tab === "queue" && (
+                        <>
+                            <div style={styles.toolbar}>
+                                <button
+                                    style={{
+                                        ...styles.primaryButton,
+                                        opacity: loadingQueue ? 0.7 : 1,
+                                        cursor: loadingQueue ? "default" : "pointer",
+                                    }}
+                                    onClick={loadQueue}
+                                    disabled={loadingQueue}
+                                    onMouseDown={(e) => {
+                                        e.currentTarget.style.transform = "scale(0.97)";
+                                        e.currentTarget.style.boxShadow =
+                                            "0 4px 10px rgba(79,70,229,0.35)";
+                                    }}
+                                    onMouseUp={(e) => {
+                                        e.currentTarget.style.transform = "scale(1)";
+                                        e.currentTarget.style.boxShadow =
+                                            "0 8px 18px rgba(79,70,229,0.45)";
+                                    }}
+                                >
+                                    <span>Обновить очередь</span>
+                                </button>
+
+                                <label style={styles.autoRefreshLabel}>
+                                    <input
+                                        type="checkbox"
+                                        style={styles.checkbox}
+                                        checked={autoRefresh}
+                                        onChange={(e) => setAutoRefresh(e.target.checked)}
+                                    />
+                                    автообновление каждые 7 секунд
+                                </label>
+                            </div>
+
+                            {queueError && (
+                                <div style={styles.errorText}>{queueError}</div>
+                            )}
+
+                            <div style={styles.queueList}>
+                                {queueSorted.map((o) => (
+                                    <div
+                                        key={o.order_id}
+                                        style={styles.orderCard(o.status)}
+                                    >
+                                        <div style={styles.orderHeaderRow}>
+                                            <div>
+                                                <div style={styles.orderId}>
+                                                    #{o.order_id.slice(0, 8)}…
+                                                </div>
+                                                <div style={styles.orderMeta}>
+                                                    {/* Если есть created_at, его можно красиво форматнуть */}
+                                                    Статус заказа
+                                                </div>
+                                            </div>
+                                            <div>
+                                                {o.status === "NEW" && (
+                                                    <span style={styles.badge("yellow")}>Новый</span>
+                                                )}
+                                                {o.status === "IN_PROGRESS" && (
+                                                    <span style={styles.badge("green")}>
+                                                        В работе
+                                                    </span>
+                                                )}
+                                                {o.status !== "NEW" &&
+                                                    o.status !== "IN_PROGRESS" && (
+                                                        <span style={styles.badge("gray")}>
+                                                            {o.status}
+                                                        </span>
+                                                    )}
+                                            </div>
+                                        </div>
+
+                                        <div style={styles.itemsRow}>
+                                            <span style={styles.itemsLabel}>Позиции:</span>
+                                            <div>
+                                                {o.items.items.map((i, idx) => (
+                                                    <span key={idx} style={styles.itemsPill}>
+                                                        {menuMap[i.menu_item_id] ?? i.menu_item_id} ×{" "}
+                                                        {i.quantity}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div style={styles.orderActions}>
+                                            <button
+                                                style={{
+                                                    ...styles.primaryButtonSmall,
+                                                    background:
+                                                        o.status === "NEW" ? "#111827" : "#9ca3af",
+                                                    cursor:
+                                                        o.status === "NEW" ? "pointer" : "default",
+                                                }}
+                                                onClick={() => startOrder(o.order_id)}
+                                                disabled={o.status !== "NEW"}
+                                            >
+                                                Взять в работу
+                                            </button>
+                                            <button
+                                                style={{
+                                                    ...styles.primaryButtonGhost,
+                                                    opacity: o.status === "IN_PROGRESS" ? 1 : 0.5,
+                                                    cursor:
+                                                        o.status === "IN_PROGRESS"
+                                                            ? "pointer"
+                                                            : "default",
+                                                }}
+                                                onClick={() => completeOrder(o.order_id)}
+                                                disabled={o.status !== "IN_PROGRESS"}
+                                            >
+                                                Готово
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {queueSorted.length === 0 && !queueError && (
+                                    <div
+                                        style={{
+                                            gridColumn: "1 / -1",
+                                            textAlign: "center",
+                                            padding: "24px 0 10px",
+                                            fontSize: 14,
+                                            color: "#6b7280",
+                                        }}
+                                    >
+                                        Очередь пуста ☕
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    )}
+
+                    {tab === "recipes" && (
+                        <>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    gap: 12,
+                                    flexWrap: "wrap",
+                                    marginBottom: 8,
+                                }}
                             >
-                                Взять
-                            </button>{" "}
-                            <button
-                                onClick={() => completeOrder(o.order_id)}
-                                disabled={o.status !== "IN_PROGRESS"}
-                            >
-                                Готово
-                            </button>
-                        </div>
-                    ))}
-                </>
-            )}
+                                <div>
+                                    <div
+                                        style={{
+                                            fontSize: 13,
+                                            fontWeight: 500,
+                                            color: "#374151",
+                                            marginBottom: 4,
+                                        }}
+                                    >
+                                        Рецепт напитка
+                                    </div>
+                                    <select
+                                        value={selectedMenuId}
+                                        onChange={(e) => setSelectedMenuId(e.target.value)}
+                                        style={styles.select}
+                                    >
+                                        {menuItems.map((m) => (
+                                            <option
+                                                key={m.menu_item_id}
+                                                value={m.menu_item_id}
+                                            >
+                                                {m.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
 
-            {tab === "recipes" && (
-                <>
-                    <select
-                        value={selectedMenuId}
-                        onChange={(e) => setSelectedMenuId(e.target.value)}
-                    >
-                        {menuItems.map((m) => (
-                            <option key={m.menu_item_id} value={m.menu_item_id}>
-                                {m.name}
-                            </option>
-                        ))}
-                    </select>
+                            {recipeError && (
+                                <div style={styles.errorText}>{recipeError}</div>
+                            )}
 
-                    {recipeError && <p style={{ color: "red" }}>{recipeError}</p>}
-
-                    <ul>
-                        {recipe.map((r, idx) => (
-                            <li key={idx}>
-                                {ingredientMap[r.ingredient_id]?.name ??
-                                    r.ingredient_id.slice(0, 8)}
-                                : {r.quantity}{" "}
-                                {ingredientMap[r.ingredient_id]?.unit ?? ""}
-                            </li>
-                        ))}
-                    </ul>
-                </>
-            )}
+                            <ul style={styles.recipeList}>
+                                {recipe.map((r, idx) => (
+                                    <li key={idx} style={styles.recipeItem}>
+                                        <strong>
+                                            {ingredientMap[r.ingredient_id]?.name ??
+                                                r.ingredient_id.slice(0, 8)}
+                                        </strong>
+                                        {": "}
+                                        {r.quantity}{" "}
+                                        {ingredientMap[r.ingredient_id]?.unit ?? ""}
+                                    </li>
+                                ))}
+                                {recipe.length === 0 && !recipeError && (
+                                    <li style={{ fontSize: 13, color: "#6b7280" }}>
+                                        Для этого напитка ещё не добавлен рецепт.
+                                    </li>
+                                )}
+                            </ul>
+                        </>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
